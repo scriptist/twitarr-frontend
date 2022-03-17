@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './react/App';
-import { Global, css } from '@emotion/react'
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import { Global, css } from "@emotion/react";
+import App from "./react/App";
+import React from "react";
+import ReactDOM from "react-dom";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -18,5 +18,5 @@ ReactDOM.render(
     />
     <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root"),
 );
