@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Button,
   IconButton,
   Menu,
   MenuItem,
@@ -11,6 +12,8 @@ import { Link, Outlet, matchPath, useLocation } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import LinkButton from "../component/LinkButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import TwitarrAPI3 from "../../api/TwitarrAPI3";
+import { useIsLoggedIn } from "../../recoil/APIAuthHooks";
 import { useState } from "react";
 
 const tabLinks: [string, string][] = [
@@ -30,15 +33,23 @@ const menuLinks: [string, string][] = [
 interface Props {}
 
 export default function Layout(_: Props) {
+  const isLoggedIn = useIsLoggedIn();
+
   return (
     <>
       <AppBar position="sticky">
         <Toolbar>
           <MenuLinks />
           <TabLinks />
-          <LinkButton color="inherit" to="/login">
-            Log in
-          </LinkButton>
+          {isLoggedIn ? (
+            <Button color="inherit" onClick={() => TwitarrAPI3.logOut()}>
+              Log out
+            </Button>
+          ) : (
+            <LinkButton color="inherit" to="/login">
+              Log in
+            </LinkButton>
+          )}
         </Toolbar>
       </AppBar>
       <Outlet />

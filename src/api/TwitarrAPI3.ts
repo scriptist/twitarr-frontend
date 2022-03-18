@@ -1,10 +1,11 @@
 import { getCookie, removeCookie, setCookie } from "typescript-cookie";
 
 class TwittarrAPI3 {
-  readonly apiRoot: string = "https://swiftarr.herokuapp.com/api/v3";
-  readonly cookieName: string = "twitarr-session";
+  private readonly apiRoot: string = "https://swiftarr.herokuapp.com/api/v3";
+  private readonly cookieName: string = "twitarr-session";
 
-  user: APIUser | undefined;
+  private authChangeHandler: APIAuthChangeHandler | undefined;
+  private user: APIUser | undefined;
 
   constructor() {
     // Load session information from cookie
@@ -21,6 +22,14 @@ class TwittarrAPI3 {
     } catch {
       // Invalid cookie - wipe it
       removeCookie(this.cookieName);
+    }
+  }
+
+  setAuthChangeHandler(authChangeHandler: APIAuthChangeHandler | undefined) {
+    this.authChangeHandler = authChangeHandler;
+
+    if (this.authChangeHandler != null) {
+      this.authChangeHandler(this.user);
     }
   }
 
@@ -44,40 +53,80 @@ class TwittarrAPI3 {
       },
     }),
     processSuccess: (result) => {
-      this.user = { token: result.data.token, userID: result.data.userID };
-      setCookie(this.cookieName, JSON.stringify(this.user), { expires: 7 });
+      this.setUser({ token: result.data.token, userID: result.data.userID });
     },
   });
+
+  // Log a user out
+  logOut = this.createAPIMethod<
+    void,
+    {
+      token: string;
+      userID: string;
+    }
+  >({
+    path: "auth/logout",
+    requestInit: {
+      method: "POST",
+    },
+    processSuccess: (result) => {
+      this.setUser(undefined);
+    },
+    processFailure: (result) => {
+      this.setUser(undefined);
+    },
+  });
+
+  private setUser(user: APIUser | undefined) {
+    this.user = user;
+
+    if (this.authChangeHandler != null) {
+      this.authChangeHandler(this.user);
+    }
+
+    if (user != null) {
+      setCookie(this.cookieName, JSON.stringify(this.user), { expires: 7 });
+    } else {
+      removeCookie(this.cookieName);
+    }
+  }
 
   // Internal helper used to create API methods
   private createAPIMethod<TParams, TResponseData>(config: {
     path: string | ((params: TParams) => string);
-    requestInit: (params: TParams) => RequestInit;
+    requestInit: RequestInit | ((params: TParams) => RequestInit);
     processSuccess?: (result: APIResultSuccess<TResponseData>) => void;
+    processFailure?: (result: APIResultError) => void;
   }): APIMethod<TParams, TResponseData> {
     return async (params: TParams) => {
       const path =
-        typeof config.path === "string" ? config.path : config.path(params);
-      const requestInit = config.requestInit(params);
+        typeof config.path === "function" ? config.path(params) : config.path;
+      const requestInit =
+        typeof config.requestInit === "function"
+          ? config.requestInit(params)
+          : config.requestInit;
 
       const result = await this.makeRequest<TResponseData>(
         `${this.apiRoot}/${path}`,
         requestInit,
       );
 
-      if (
-        typeof config.processSuccess === "function" &&
-        result.success === true
-      ) {
-        try {
-          config.processSuccess(result);
-        } catch (e) {
-          return {
-            success: false,
-            status: -2,
-            text: e instanceof Error ? e.message : "Unknown error",
-          };
+      try {
+        if (result.success) {
+          if (config.processSuccess != null) {
+            config.processSuccess(result);
+          }
+        } else {
+          if (config.processFailure != null) {
+            config.processFailure(result);
+          }
         }
+      } catch (e) {
+        return {
+          success: false,
+          status: -2,
+          text: e instanceof Error ? e.message : "Unknown error",
+        };
       }
 
       return result;
@@ -114,7 +163,9 @@ class TwittarrAPI3 {
 
 // Types
 
-type APIUser = { token: string; userID: string };
+export type APIUser = { token: string; userID: string };
+
+type APIAuthChangeHandler = (user: APIUser | undefined) => void;
 
 type APIResult<TResponseData> =
   | APIResultSuccess<TResponseData>

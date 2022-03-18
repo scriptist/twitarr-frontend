@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import APIAuthStateMaintainer from "../listeners/APIAuthStateMainter";
 import ComingSoonPage from "./page/ComingSoonPage";
 import Layout from "./page/Layout";
 import LogInPage from "./page/LogInPage";
@@ -36,6 +37,9 @@ export default function App(_: Props) {
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
+
+      {/* Listeners */}
+      <APIAuthStateMaintainer />
     </BrowserRouter>
   );
 }
