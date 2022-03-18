@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ComingSoonPage from "./page/ComingSoonPage";
 import Layout from "./page/Layout";
+import LogInPage from "./page/LogInPage";
 import NotFoundPage from "./page/NotFoundPage";
 
 interface Props {}
@@ -29,6 +30,8 @@ export default function App(_: Props) {
             <Route path=":seamailId" element={<ComingSoonPage />} />
           </Route>
           <Route path="schedule" element={<ComingSoonPage />} />
+
+          <Route path="login" element={<LogInPage />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>
