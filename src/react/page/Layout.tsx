@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { Link, Outlet, matchPath, useLocation } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import LinkButton from "../component/LinkButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 
@@ -35,6 +36,9 @@ export default function Layout(_: Props) {
         <Toolbar>
           <MenuLinks />
           <TabLinks />
+          <LinkButton color="inherit" to="/login">
+            Log in
+          </LinkButton>
         </Toolbar>
       </AppBar>
       <Outlet />
@@ -83,7 +87,11 @@ function TabLinks() {
     <ThemeProvider
       theme={createTheme({ palette: { primary: { main: "#fff" } } })}
     >
-      <Tabs textColor="inherit" value={selectedTab ?? false}>
+      <Tabs
+        sx={{ flexGrow: 1 }}
+        textColor="inherit"
+        value={selectedTab ?? false}
+      >
         {tabLinks.map(([label, path]) => (
           <Tab
             component={Link}
