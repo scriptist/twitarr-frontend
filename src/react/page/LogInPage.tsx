@@ -7,10 +7,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 import LinkButton from "../component/LinkButton";
 import { LoadingButton } from "@mui/lab";
 import TwitarrAPI3 from "../../api/TwitarrAPI3";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 interface Props {}
@@ -21,6 +21,11 @@ export default function LogInPage(_: Props) {
   const [error, setError] = useState(false);
   const [waiting, setWaiting] = useState(false);
   const navigate = useNavigate();
+
+  const { state } = useLocation();
+  const redirectTo: string = isStateWithRedirect(state)
+    ? state.redirectTo
+    : "/tweets";
 
   return (
     <Grid
@@ -37,7 +42,7 @@ export default function LogInPage(_: Props) {
             const result = await TwitarrAPI3.logIn({ username, password });
 
             if (result.success) {
-              navigate("/tweets");
+              navigate(redirectTo);
             } else {
               setError(true);
               setWaiting(false);
@@ -91,5 +96,15 @@ export default function LogInPage(_: Props) {
         </form>
       </Box>
     </Grid>
+  );
+}
+
+// Helpers
+
+type StateWithRedirect = { redirectTo: "string" };
+
+function isStateWithRedirect(state: unknown): state is StateWithRedirect {
+  return (
+    state != null && typeof (state as StateWithRedirect).redirectTo === "string"
   );
 }

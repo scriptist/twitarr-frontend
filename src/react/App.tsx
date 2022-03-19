@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import APIAuthStateMaintainer from "../listeners/APIAuthStateMainter";
+import AuthGate from "./component/AuthGate";
 import ComingSoonPage from "./page/ComingSoonPage";
 import Layout from "./page/Layout";
 import LogInPage from "./page/LogInPage";
@@ -13,8 +14,26 @@ export default function App(_: Props) {
       <Routes>
         <Route element={<Layout />} path="/">
           <Route element={<ComingSoonPage />} index />
-          <Route element={<ComingSoonPage />} path="tweets" />
-          <Route element={<ComingSoonPage />} path="forum">
+
+          {/* Tweets */}
+          <Route
+            element={
+              <AuthGate>
+                <ComingSoonPage />
+              </AuthGate>
+            }
+            path="tweets"
+          />
+
+          {/* Forum */}
+          <Route
+            element={
+              <AuthGate>
+                <ComingSoonPage />
+              </AuthGate>
+            }
+            path="forum"
+          >
             <Route element={<ComingSoonPage />} index />
             <Route element={<ComingSoonPage />} path="favorites" />
             <Route element={<ComingSoonPage />} path="owned" />
@@ -26,10 +45,21 @@ export default function App(_: Props) {
               <Route element={<ComingSoonPage />} path=":postId" />
             </Route>
           </Route>
-          <Route element={<ComingSoonPage />} path="seamail">
+
+          {/* Seamail */}
+          <Route
+            element={
+              <AuthGate>
+                <ComingSoonPage />
+              </AuthGate>
+            }
+            path="seamail"
+          >
             <Route element={<ComingSoonPage />} index />
             <Route element={<ComingSoonPage />} path=":seamailId" />
           </Route>
+
+          {/* Schedule */}
           <Route element={<ComingSoonPage />} path="schedule" />
 
           <Route element={<LogInPage />} path="login" />
