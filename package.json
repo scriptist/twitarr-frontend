@@ -40,7 +40,7 @@
     "build": "react-scripts build",
     "prepare": "husky install",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "echo 'twitarr.berman.xyz' > ./build/CNAME && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
