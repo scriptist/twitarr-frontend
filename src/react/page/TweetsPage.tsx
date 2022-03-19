@@ -1,12 +1,15 @@
 import { Container, Stack } from "@mui/material";
-import TwitarrAPI3, { APITwarrt } from "../../api/TwitarrAPI3";
+import TwitarrAPI3, { APIResultError, APITwarrt } from "../../api/TwitarrAPI3";
 import { useEffect, useState } from "react";
+import ErrorPage from "./ErrorPage";
+import LoadingPage from "./LoadingPage";
 import Twarrt from "../component/Twarrt";
 
 interface Props {}
 
 export default function TweetsPage(_: Props) {
   const [twarrts, setTwarrts] = useState<APITwarrt[] | undefined>();
+  const [error, setError] = useState<APIResultError | undefined>();
 
   useEffect(() => {
     (async () => {
@@ -14,13 +17,17 @@ export default function TweetsPage(_: Props) {
       if (result.success) {
         setTwarrts(result.data);
       } else {
-        alert("Could not load tweets");
+        setError(result);
       }
     })();
   }, []);
 
+  if (error != null) {
+    return <ErrorPage error={error} />;
+  }
+
   if (twarrts == null) {
-    return <>Loading...</>;
+    return <LoadingPage />;
   }
 
   return (

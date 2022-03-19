@@ -222,16 +222,16 @@ export type APIUser = { token: string; userID: string };
 
 type APIAuthChangeHandler = (user: APIUser | undefined) => void;
 
-type APIResult<TResponseData> =
+export type APIResult<TResponseData> =
   | APIResultSuccess<TResponseData>
   | APIResultError;
 
-interface APIResultSuccess<TResponseData> {
+export interface APIResultSuccess<TResponseData> {
   data: TResponseData;
   success: true;
 }
 
-interface APIResultError {
+export interface APIResultError {
   success: false;
   status: number;
   text: string;
