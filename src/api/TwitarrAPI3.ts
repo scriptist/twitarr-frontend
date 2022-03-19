@@ -1,7 +1,9 @@
 import { getCookie, removeCookie, setCookie } from "typescript-cookie";
 
+// https://github.com/challfry/swiftarr/wiki/API-Documentation
+
 class TwittarrAPI3 {
-  private readonly apiRoot: string = "https://swiftarr.herokuapp.com/api/v3";
+  readonly apiRoot: string = "https://swiftarr.herokuapp.com/api/v3";
   private readonly cookieName: string = "twitarr-session";
 
   private authChangeHandler: APIAuthChangeHandler | undefined;
@@ -66,6 +68,7 @@ class TwittarrAPI3 {
     }
   >({
     path: "auth/logout",
+    requiresAuth: true,
     requestInit: {
       method: "POST",
     },
@@ -75,6 +78,35 @@ class TwittarrAPI3 {
     processFailure: (result) => {
       this.setUser(undefined);
     },
+  });
+
+  // Twarrts
+  getTwarrts = this.createAPIMethod<
+    {
+      search?: string;
+      hashtag?: string;
+      mentions?: string;
+      mentionSelf?: string;
+      byUser?: string;
+      byUsername?: string;
+      bookmarked?: boolean;
+      inBarrel?: string;
+      replyGroup?: string;
+      likeType?: string;
+
+      after?: string;
+      before?: string;
+      afterDate?: number;
+      beforeDate?: number;
+      from?: string;
+
+      start?: number;
+      limit?: number;
+    } | void,
+    APITwarrt[]
+  >({
+    path: "twitarr",
+    requiresAuth: true,
   });
 
   private setUser(user: APIUser | undefined) {
@@ -94,18 +126,41 @@ class TwittarrAPI3 {
   // Internal helper used to create API methods
   private createAPIMethod<TParams, TResponseData>(config: {
     path: string | ((params: TParams) => string);
-    requestInit: RequestInit | ((params: TParams) => RequestInit);
+    requiresAuth?: boolean;
+    requestInit?: RequestInit | ((params: TParams) => RequestInit);
     processSuccess?: (result: APIResultSuccess<TResponseData>) => void;
     processFailure?: (result: APIResultError) => void;
   }): APIMethod<TParams, TResponseData> {
     return async (params: TParams) => {
+      // Get request info
       const path =
         typeof config.path === "function" ? config.path(params) : config.path;
-      const requestInit =
+      let requestInit =
         typeof config.requestInit === "function"
           ? config.requestInit(params)
-          : config.requestInit;
+          : config.requestInit ?? {};
 
+      // Add Authorization header if required
+      if (config.requiresAuth) {
+        if (this.user == null) {
+          // No auth, so let's save time and pretend we got a 401
+          return {
+            success: false,
+            status: 401,
+            text: "Unauthorized",
+          };
+        }
+
+        requestInit = {
+          headers: {
+            Authorization: "Bearer " + this.user.token,
+            ...requestInit.headers,
+          },
+          ...requestInit,
+        };
+      }
+
+      // Make request
       const result = await this.makeRequest<TResponseData>(
         `${this.apiRoot}/${path}`,
         requestInit,
@@ -185,5 +240,21 @@ interface APIResultError {
 type APIMethod<TParams, TResponseData> = (
   params: TParams,
 ) => Promise<APIResult<TResponseData>>;
+
+export interface APITwarrt {
+  author: APIAuthor;
+  createdAt: string;
+  images: string[];
+  isBookmarked: boolean;
+  likeCount: number;
+  text: string;
+  twarrtID: number;
+}
+
+export interface APIAuthor {
+  displayName: string;
+  username: string;
+  userID: string;
+}
 
 export default new TwittarrAPI3();

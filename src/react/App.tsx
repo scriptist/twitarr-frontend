@@ -5,6 +5,7 @@ import ComingSoonPage from "./page/ComingSoonPage";
 import Layout from "./page/Layout";
 import LogInPage from "./page/LogInPage";
 import NotFoundPage from "./page/NotFoundPage";
+import TweetsPage from "./page/TweetsPage";
 
 interface Props {}
 
@@ -19,7 +20,7 @@ export default function App(_: Props) {
           <Route
             element={
               <AuthGate>
-                <ComingSoonPage />
+                <TweetsPage />
               </AuthGate>
             }
             path="tweets"
