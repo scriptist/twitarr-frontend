@@ -24,8 +24,8 @@ export default function LogInPage(_: Props) {
 
   return (
     <Grid
-      container
       alignItems="center"
+      container
       justifyContent="center"
       style={{ minHeight: "calc(100vh - 64px)" }}
     >
@@ -51,34 +51,34 @@ export default function LogInPage(_: Props) {
                 flexDirection: "column",
               }}
             >
-              <Typography variant="h1" component="h2">
+              <Typography component="h2" variant="h1">
                 Log in to Twitarr
               </Typography>
               <TextField
-                type="text"
                 label="Username"
                 margin="normal"
-                required
-                value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                required
+                type="text"
+                value={username}
               />
               <TextField
-                type="password"
-                label="Password"
-                margin="normal"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 error={error}
                 helperText={error ? "Invalid username or password" : null}
+                label="Password"
+                margin="normal"
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                type="password"
+                value={password}
               />
             </CardContent>
             <CardActions sx={{ justifyContent: "space-between", p: 2, pt: 0 }}>
               <LoadingButton
                 disabled={waiting}
                 loading={waiting}
-                type="submit"
                 size="large"
+                type="submit"
                 variant="contained"
               >
                 Log in

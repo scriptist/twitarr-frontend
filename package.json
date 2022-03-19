@@ -48,6 +48,7 @@
     "rules": {
       "prettier/prettier": "warn",
       "sort-imports": "error",
+      "react/jsx-sort-props": "warn",
       "react-hooks/exhaustive-deps": [
         "warn",
         {

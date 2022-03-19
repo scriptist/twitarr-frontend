@@ -67,19 +67,19 @@ function MenuLinks() {
   return (
     <>
       <IconButton
-        size="large"
-        edge="start"
-        color="inherit"
         aria-label="menu"
-        sx={{ mr: 2 }}
+        color="inherit"
+        edge="start"
         onClick={(event) => setMenuAnchorEl(event.currentTarget)}
+        size="large"
+        sx={{ mr: 2 }}
       >
         <MenuIcon />
       </IconButton>
       <Menu
         anchorEl={menuAnchorEl}
-        open={menuAnchorEl != null}
         onClose={closeMenu}
+        open={menuAnchorEl != null}
       >
         {menuLinks.map(([label, path]) => (
           <MenuItem component={Link} key={path} onClick={closeMenu} to={path}>
