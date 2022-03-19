@@ -7,7 +7,7 @@ class TwittarrAPI3 {
   private readonly cookieName: string = "twitarr-session";
 
   private authChangeHandler: APIAuthChangeHandler | undefined;
-  private user: APIUser | undefined;
+  user: APIUser | undefined;
 
   constructor() {
     // Load session information from cookie

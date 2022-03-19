@@ -1,9 +1,9 @@
+import TwittarrAPI3, { APIUser } from "../api/TwitarrAPI3";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
-import type { APIUser } from "../api/TwitarrAPI3";
 
 const auth = atom<APIUser | undefined>({
   key: "APIUser",
-  default: undefined,
+  default: TwittarrAPI3.user,
 });
 
 export function useUser(): APIUser | undefined {
