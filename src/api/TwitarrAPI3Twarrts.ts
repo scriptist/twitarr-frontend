@@ -36,14 +36,17 @@ export default class TwitarrAPI3Twarrts extends TwitarrAPI3Module {
     {
       text: string;
       images: [];
-      postAsModerator?: boolean;
-      postAsTwitarrTeam?: boolean;
+      postAsModerator: boolean;
+      postAsTwitarrTeam: boolean;
     },
     APITwarrt
   >({
     path: "twitarr/create",
     requiresAuth: true,
     requestInit: (params) => ({
+      headers: {
+        "Content-Type": "application/json",
+      },
       method: "POST",
       body: JSON.stringify(params),
     }),

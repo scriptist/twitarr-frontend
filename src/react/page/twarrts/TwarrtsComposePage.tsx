@@ -22,10 +22,12 @@ export default function TwarrtsComposePage(_: Props) {
           const result = await TwitarrAPI3.twarrts.createTwarrt({
             text,
             images: [],
+            postAsModerator: false,
+            postAsTwitarrTeam: false,
           });
 
           if (result.success) {
-            navigate("/twarrts");
+            navigate("/tweets");
           } else {
             setError(result.text);
             setWaiting(false);
