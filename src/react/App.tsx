@@ -1,11 +1,18 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+} from "react-router-dom";
 import APIAuthStateMaintainer from "../listeners/APIAuthStateMainter";
 import AuthGate from "./component/AuthGate";
 import ComingSoonPage from "./page/ComingSoonPage";
 import Layout from "./page/Layout";
 import LogInPage from "./page/LogInPage";
 import NotFoundPage from "./page/NotFoundPage";
-import TweetsPage from "./page/TweetsPage";
+import TwarrtsComposePage from "./page/twarrts/TwarrtsComposePage";
+import TwarrtsListPage from "./page/twarrts/TwarrtsListPage";
 
 interface Props {}
 
@@ -20,11 +27,14 @@ export default function App(_: Props) {
           <Route
             element={
               <AuthGate>
-                <TweetsPage />
+                <Outlet />
               </AuthGate>
             }
             path="tweets"
-          />
+          >
+            <Route element={<TwarrtsListPage />} index />
+            <Route element={<TwarrtsComposePage />} path="compose" />
+          </Route>
 
           {/* Forum */}
           <Route

@@ -11,7 +11,7 @@ import {
 import { Link, Outlet, matchPath, useLocation } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import LinkButton from "../component/LinkButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import { Menu as MenuIcon } from "@mui/icons-material";
 import TwitarrAPI3 from "../../api/TwitarrAPI3";
 import { useIsLoggedIn } from "../../recoil/APIAuthHooks";
 import { useState } from "react";

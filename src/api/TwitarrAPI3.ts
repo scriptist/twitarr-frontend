@@ -86,11 +86,11 @@ class TwittarrAPI3 {
         }
 
         requestInit = {
+          ...requestInit,
           headers: {
             Authorization: "Bearer " + this.user.token,
             ...requestInit.headers,
           },
-          ...requestInit,
         };
       }
 

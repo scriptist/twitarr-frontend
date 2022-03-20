@@ -30,4 +30,22 @@ export default class TwitarrAPI3Twarrts extends TwitarrAPI3Module {
     path: "twitarr",
     requiresAuth: true,
   });
+
+  // Post a new Twarrt
+  createTwarrt = this.createAPIMethod<
+    {
+      text: string;
+      images: [];
+      postAsModerator?: boolean;
+      postAsTwitarrTeam?: boolean;
+    },
+    APITwarrt
+  >({
+    path: "twitarr/create",
+    requiresAuth: true,
+    requestInit: (params) => ({
+      method: "POST",
+      body: JSON.stringify(params),
+    }),
+  });
 }
