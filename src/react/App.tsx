@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import APIAuthStateMaintainer from "../listeners/APIAuthStateMainter";
 import AuthGate from "./component/AuthGate";
 import ComingSoonPage from "./page/ComingSoonPage";
@@ -14,7 +14,7 @@ export default function App(_: Props) {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />} path="/">
-          <Route element={<ComingSoonPage />} index />
+          <Route element={<Navigate replace to="/tweets" />} index />
 
           {/* Tweets */}
           <Route
