@@ -11,7 +11,18 @@ class TwittarrAPI3 {
   private authChangeHandler: APIAuthChangeHandler | undefined;
   user: APIUser | undefined;
 
+  // Modules
+  auth: TwitarrAPI3Auth;
+  twarrts: TwitarrAPI3Twarrts;
+
   constructor() {
+    // Init modules
+    this.createAPIMethod = this.createAPIMethod.bind(this);
+    this.setUser = this.setUser.bind(this);
+
+    this.auth = new TwitarrAPI3Auth(this.createAPIMethod, this.setUser);
+    this.twarrts = new TwitarrAPI3Twarrts(this.createAPIMethod);
+
     // Load session information from cookie
     try {
       const cookie = getCookie(this.cookieName);
@@ -28,8 +39,6 @@ class TwittarrAPI3 {
       removeCookie(this.cookieName);
     }
   }
-  auth = new TwitarrAPI3Auth(this.createAPIMethod, this.setUser);
-  twarrts = new TwitarrAPI3Twarrts(this.createAPIMethod);
 
   setAuthChangeHandler(authChangeHandler: APIAuthChangeHandler | undefined) {
     this.authChangeHandler = authChangeHandler;
