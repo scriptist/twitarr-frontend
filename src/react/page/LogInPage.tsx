@@ -39,7 +39,7 @@ export default function LogInPage(_: Props) {
           onSubmit={async (e) => {
             e.preventDefault();
             setWaiting(true);
-            const result = await TwitarrAPI3.logIn({ username, password });
+            const result = await TwitarrAPI3.auth.logIn({ username, password });
 
             if (result.success) {
               navigate(redirectTo);

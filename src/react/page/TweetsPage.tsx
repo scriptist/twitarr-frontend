@@ -13,7 +13,7 @@ export default function TweetsPage(_: Props) {
 
   useEffect(() => {
     (async () => {
-      const result = await TwitarrAPI3.getTwarrts();
+      const result = await TwitarrAPI3.twarrts.getTwarrts();
       if (result.success) {
         setTwarrts(result.data);
       } else {

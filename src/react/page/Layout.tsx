@@ -42,7 +42,7 @@ export default function Layout(_: Props) {
           <MenuLinks />
           <TabLinks />
           {isLoggedIn ? (
-            <Button color="inherit" onClick={() => TwitarrAPI3.logOut()}>
+            <Button color="inherit" onClick={() => TwitarrAPI3.auth.logOut()}>
               Log out
             </Button>
           ) : (

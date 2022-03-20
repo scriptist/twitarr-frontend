@@ -1,4 +1,6 @@
 import { getCookie, removeCookie, setCookie } from "typescript-cookie";
+import TwitarrAPI3Auth from "./TwitarrAPI3Auth";
+import TwitarrAPI3Twarrts from "./TwitarrAPI3Twarrts";
 
 // https://github.com/challfry/swiftarr/wiki/API-Documentation
 
@@ -26,6 +28,8 @@ class TwittarrAPI3 {
       removeCookie(this.cookieName);
     }
   }
+  auth = new TwitarrAPI3Auth(this.createAPIMethod, this.setUser);
+  twarrts = new TwitarrAPI3Twarrts(this.createAPIMethod);
 
   setAuthChangeHandler(authChangeHandler: APIAuthChangeHandler | undefined) {
     this.authChangeHandler = authChangeHandler;
@@ -35,81 +39,7 @@ class TwittarrAPI3 {
     }
   }
 
-  // Log a user in, given a username and password
-  logIn = this.createAPIMethod<
-    {
-      username: string;
-      password: string;
-    },
-    {
-      token: string;
-      userID: string;
-    }
-  >({
-    path: "auth/login",
-    requestInit: ({ username, password }) => ({
-      method: "POST",
-      headers: {
-        Authorization: "Basic " + btoa(username + ":" + password),
-        "Content-Type": "application/json",
-      },
-    }),
-    processSuccess: (result) => {
-      this.setUser({ token: result.data.token, userID: result.data.userID });
-    },
-  });
-
-  // Log a user out
-  logOut = this.createAPIMethod<
-    void,
-    {
-      token: string;
-      userID: string;
-    }
-  >({
-    path: "auth/logout",
-    requiresAuth: true,
-    requestInit: {
-      method: "POST",
-    },
-    processSuccess: (result) => {
-      this.setUser(undefined);
-    },
-    processFailure: (result) => {
-      this.setUser(undefined);
-    },
-  });
-
-  // Twarrts
-  getTwarrts = this.createAPIMethod<
-    {
-      search?: string;
-      hashtag?: string;
-      mentions?: string;
-      mentionSelf?: string;
-      byUser?: string;
-      byUsername?: string;
-      bookmarked?: boolean;
-      inBarrel?: string;
-      replyGroup?: string;
-      likeType?: string;
-
-      after?: string;
-      before?: string;
-      afterDate?: number;
-      beforeDate?: number;
-      from?: string;
-
-      start?: number;
-      limit?: number;
-    } | void,
-    APITwarrt[]
-  >({
-    path: "twitarr",
-    requiresAuth: true,
-  });
-
-  private setUser(user: APIUser | undefined) {
+  private setUser(user: APIUser | undefined): void {
     this.user = user;
 
     if (this.authChangeHandler != null) {
@@ -123,14 +53,9 @@ class TwittarrAPI3 {
     }
   }
 
-  // Internal helper used to create API methods
-  private createAPIMethod<TParams, TResponseData>(config: {
-    path: string | ((params: TParams) => string);
-    requiresAuth?: boolean;
-    requestInit?: RequestInit | ((params: TParams) => RequestInit);
-    processSuccess?: (result: APIResultSuccess<TResponseData>) => void;
-    processFailure?: (result: APIResultError) => void;
-  }): APIMethod<TParams, TResponseData> {
+  private createAPIMethod<TParams, TResponseData>(
+    config: CreateAPIMethodConfig<TParams, TResponseData>,
+  ): APIMethod<TParams, TResponseData> {
     return async (params: TParams) => {
       // Get request info
       const path =
@@ -237,10 +162,6 @@ export interface APIResultError {
   text: string;
 }
 
-type APIMethod<TParams, TResponseData> = (
-  params: TParams,
-) => Promise<APIResult<TResponseData>>;
-
 export interface APITwarrt {
   author: APIAuthor;
   createdAt: string;
@@ -256,5 +177,23 @@ export interface APIAuthor {
   username: string;
   userID: string;
 }
+
+export interface APICreateAPIMethod {
+  <TParams, TResponseData>(
+    config: CreateAPIMethodConfig<TParams, TResponseData>,
+  ): APIMethod<TParams, TResponseData>;
+}
+
+type CreateAPIMethodConfig<TParams, TResponseData> = {
+  path: string | ((params: TParams) => string);
+  requiresAuth?: boolean;
+  requestInit?: RequestInit | ((params: TParams) => RequestInit);
+  processSuccess?: (result: APIResultSuccess<TResponseData>) => void;
+  processFailure?: (result: APIResultError) => void;
+};
+
+type APIMethod<TParams, TResponseData> = (
+  params: TParams,
+) => Promise<APIResult<TResponseData>>;
 
 export default new TwittarrAPI3();
