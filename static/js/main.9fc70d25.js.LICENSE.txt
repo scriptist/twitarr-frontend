@@ -4,6 +4,8 @@ object-assign
 @license MIT
 */
 
+/*! queryStringEncode v1.0.0 | (c) 2018 Albin Larsson | Licensed under MIT */
+
 /**
  * React Router DOM v6.2.2
  *
