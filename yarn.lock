@@ -7464,6 +7464,11 @@ qs@6.9.7:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.7.tgz#4610846871485e1e048f44ae3b94033f0e675afe"
   integrity sha512-IhMFgUmuNpyRfxA90umL7ByLlgRXu6tIfKPpF5TmcfRLlLCckfP/g3IQmju6jjpu+Hh8rA+2p6A27ZSPOOHdKw==
 
+query-string-encode@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/query-string-encode/-/query-string-encode-1.0.1.tgz#1787b9947e47dc8acea5ac90c16dda864c8692f6"
+  integrity sha512-0RnnsBhClLWPIe7KY6dqf3ceLxUiTJ2EWm8JGDvMsLOSiFphntwQT8tMVPoVsDVoMMTE2u/vYSMHn3Yo5eFXpw==
+
 queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"

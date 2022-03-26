@@ -1,5 +1,4 @@
-import { Card, Container, Stack, TextField } from "@mui/material";
-import LinkButton from "../../component/LinkButton";
+import { Button, Card, Container, Stack, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import TwitarrAPI3 from "../../../api/TwitarrAPI3";
 import { useNavigate } from "react-router-dom";
@@ -57,9 +56,13 @@ export default function TwarrtsComposePage(_: Props) {
             >
               Post
             </LoadingButton>
-            <LinkButton disabled={waiting} size="large" to="/tweets">
+            <Button
+              disabled={waiting}
+              onClick={() => navigate(-1)}
+              size="large"
+            >
               Cancel
-            </LinkButton>
+            </Button>
           </Stack>
         </Card>
       </form>

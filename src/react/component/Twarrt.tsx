@@ -2,12 +2,15 @@ import { Box, Card, Link as MUILink, Stack } from "@mui/material";
 import { APITwarrt } from "../../api/TwitarrAPI3";
 import { Link } from "react-router-dom";
 import ProfileImage from "./ProfileImage";
+import { relativeTime } from "../../utils/TimeUtils";
 
 interface Props {
   twarrt: APITwarrt;
 }
 
 export default function Twarrt({ twarrt }: Props) {
+  const now = new Date();
+
   return (
     <Card sx={{ p: 2 }}>
       <Stack direction="row" spacing={2}>
@@ -27,6 +30,7 @@ export default function Twarrt({ twarrt }: Props) {
               <strong>{twarrt.author.displayName}</strong> @
               {twarrt.author.username}
             </MUILink>
+            {relativeTime(new Date(twarrt.createdAt), now)}
           </Stack>
           <Box sx={{ typography: "body1" }}>{twarrt.text}</Box>
         </Box>

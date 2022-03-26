@@ -1,11 +1,12 @@
 import { APITwarrt } from "./TwitarrAPI3";
 import TwitarrAPI3Module from "./TwitarrAPI3Module";
+import queryStringEncode from "query-string-encode";
 
 export default class TwitarrAPI3Twarrts extends TwitarrAPI3Module {
   // Twarrts
   getTwarrts = this.createAPIMethod<
     {
-      search?: string;
+      search?: string | null;
       hashtag?: string;
       mentions?: string;
       mentionSelf?: string;
@@ -27,7 +28,7 @@ export default class TwitarrAPI3Twarrts extends TwitarrAPI3Module {
     } | void,
     APITwarrt[]
   >({
-    path: "twitarr",
+    path: (params) => `twitarr?${queryStringEncode(params)}`,
     requiresAuth: true,
   });
 
