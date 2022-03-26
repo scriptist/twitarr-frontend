@@ -121,8 +121,11 @@ function NavButtons({ loadTwarrts, searchParams }: NavButtonsProps) {
           size="small"
           variant="outlined"
         >
-          <Button onClick={() => setIsSearchActive(true)}>
-            <SearchIcon fontSize="small" />
+          <Button
+            endIcon={<SearchIcon fontSize="small" />}
+            onClick={() => setIsSearchActive(true)}
+          >
+            Search
           </Button>
           <FilterButton />
         </ButtonGroup>
