@@ -36,6 +36,9 @@ export default function TwarrtsPage(_: Props) {
 
   const [searchParams] = useSearchParams();
   const loadTwarrts = useCallback(async () => {
+    setTwarrts(undefined);
+    setError(undefined);
+
     const result = await TwitarrAPI3.twarrts.getTwarrts(
       Object.fromEntries(searchParams.entries()),
     );
@@ -53,10 +56,6 @@ export default function TwarrtsPage(_: Props) {
 
   if (error != null) {
     return <ErrorPage error={error} />;
-  }
-
-  if (twarrts == null) {
-    return <LoadingPage />;
   }
 
   return (
@@ -77,13 +76,19 @@ export default function TwarrtsPage(_: Props) {
       <Stack spacing={1}>
         <NavButtons loadTwarrts={loadTwarrts} searchParams={searchParams} />
 
-        {twarrts.length === 0 ? (
+        {twarrts == null ? (
+          <LoadingPage />
+        ) : twarrts.length === 0 ? (
           <Typography sx={{ pt: 4, textAlign: "center" }} variant="h2">
             No tweets to display
           </Typography>
         ) : (
           twarrts.map((twarrt) => (
-            <Twarrt key={twarrt.twarrtID} twarrt={twarrt} />
+            <Twarrt
+              key={twarrt.twarrtID}
+              searchText={searchParams.get("search")}
+              twarrt={twarrt}
+            />
           ))
         )}
       </Stack>
@@ -165,13 +170,21 @@ interface SearchFormProps {
 function SearchForm({ onCancel, onSearch }: SearchFormProps) {
   const [text, setText] = useState("");
 
+  const [searchParams] = useSearchParams();
+  const textFromSearchParam = searchParams.get("search");
+  useEffect(() => {
+    setText(textFromSearchParam ?? "");
+  }, [textFromSearchParam]);
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
 
-        if (text !== "") {
-          onSearch(text);
+        const trimmedText = text.trim();
+
+        if (trimmedText !== "") {
+          onSearch(trimmedText);
         }
       }}
     >

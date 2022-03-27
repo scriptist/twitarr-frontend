@@ -1,14 +1,16 @@
 import { Box, Card, Link as MUILink, Stack } from "@mui/material";
 import { APITwarrt } from "../../api/TwitarrAPI3";
+import HighlightedText from "./HighlightedText";
 import { Link } from "react-router-dom";
 import ProfileImage from "./ProfileImage";
 import { relativeTime } from "../../utils/TimeUtils";
 
 interface Props {
+  searchText?: string | null;
   twarrt: APITwarrt;
 }
 
-export default function Twarrt({ twarrt }: Props) {
+export default function Twarrt({ searchText, twarrt }: Props) {
   const now = new Date();
 
   return (
@@ -32,7 +34,9 @@ export default function Twarrt({ twarrt }: Props) {
             </MUILink>
             {relativeTime(new Date(twarrt.createdAt), now)}
           </Stack>
-          <Box sx={{ typography: "body1" }}>{twarrt.text}</Box>
+          <Box sx={{ typography: "body1" }}>
+            <HighlightedText searchText={searchText} text={twarrt.text} />
+          </Box>
         </Box>
       </Stack>
     </Card>
