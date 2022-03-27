@@ -20,5 +20,9 @@ export default createTheme({
     h3: {
       fontSize: "1.2rem",
     },
+    h4: {
+      fontSize: "1rem",
+      fontWeight: "strong",
+    },
   },
 });

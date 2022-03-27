@@ -1,5 +1,6 @@
 import { getCookie, removeCookie, setCookie } from "typescript-cookie";
 import TwitarrAPI3Auth from "./TwitarrAPI3Auth";
+import TwitarrAPI3Forum from "./TwitarrAPI3Forum";
 import TwitarrAPI3Twarrts from "./TwitarrAPI3Twarrts";
 
 // https://github.com/challfry/swiftarr/wiki/API-Documentation
@@ -13,6 +14,7 @@ class TwittarrAPI3 {
 
   // Modules
   auth: TwitarrAPI3Auth;
+  forum: TwitarrAPI3Forum;
   twarrts: TwitarrAPI3Twarrts;
 
   constructor() {
@@ -21,6 +23,7 @@ class TwittarrAPI3 {
     this.setUser = this.setUser.bind(this);
 
     this.auth = new TwitarrAPI3Auth(this.createAPIMethod, this.setUser);
+    this.forum = new TwitarrAPI3Forum(this.createAPIMethod);
     this.twarrts = new TwitarrAPI3Twarrts(this.createAPIMethod);
 
     // Load session information from cookie
@@ -185,6 +188,14 @@ export interface APIAuthor {
   displayName: string;
   username: string;
   userID: string;
+}
+
+export interface APICategory {
+  categoryID: string;
+  isRestricted: true;
+  numThreads: number;
+  purpose: string;
+  title: string;
 }
 
 export interface APICreateAPIMethod {

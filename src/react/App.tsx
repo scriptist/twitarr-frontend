@@ -8,6 +8,7 @@ import {
 import APIAuthStateMaintainer from "../listeners/APIAuthStateMainter";
 import AuthGate from "./component/AuthGate";
 import ComingSoonPage from "./page/ComingSoonPage";
+import ForumCategoriesPage from "./page/forum/ForumCategoriesPage";
 import Layout from "./page/Layout";
 import LogInPage from "./page/LogInPage";
 import NotFoundPage from "./page/NotFoundPage";
@@ -40,12 +41,12 @@ export default function App(_: Props) {
           <Route
             element={
               <AuthGate>
-                <ComingSoonPage />
+                <Outlet />
               </AuthGate>
             }
             path="forum"
           >
-            <Route element={<ComingSoonPage />} index />
+            <Route element={<ForumCategoriesPage />} index />
             <Route element={<ComingSoonPage />} path="favorites" />
             <Route element={<ComingSoonPage />} path="owned" />
             <Route element={<ComingSoonPage />} path=":categoryId" />
@@ -61,7 +62,7 @@ export default function App(_: Props) {
           <Route
             element={
               <AuthGate>
-                <ComingSoonPage />
+                <Outlet />
               </AuthGate>
             }
             path="seamail"
