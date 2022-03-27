@@ -123,5 +123,7 @@ function useSelectedTab(): string | undefined {
   const { pathname } = useLocation();
 
   const paths = tabLinks.map(([, path]) => path);
-  return paths.find((p) => matchPath(p, pathname) != null);
+  return paths.find(
+    (p) => matchPath({ path: p, end: false }, pathname) != null,
+  );
 }
