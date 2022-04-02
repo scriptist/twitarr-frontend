@@ -1,16 +1,18 @@
 import {
   Box,
+  Breadcrumbs,
   ButtonBase,
   ButtonGroup,
   Card,
   Container,
+  Link as MUILink,
   Stack,
   Typography,
   useTheme,
 } from "@mui/material";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import TwitarrAPI3, {
-  APICategory,
+  APICategoryData,
   APIResultError,
 } from "../../../api/TwitarrAPI3";
 import { useCallback, useEffect, useState } from "react";
@@ -19,26 +21,30 @@ import LoadingPage from "../LoadingPage";
 
 interface Props {}
 
-export default function ForumCategoriesPage(_: Props) {
-  const [categories, setCategories] = useState<APICategory[] | undefined>();
+export default function ForumCategoryForumsPage(_: Props) {
+  const { categoryId } = useParams();
+  if (categoryId == null) {
+    throw new Error("Shit's fucked");
+  }
+
+  const [categories, setCategories] = useState<APICategoryData | undefined>();
   const [error, setError] = useState<APIResultError | undefined>();
   const theme = useTheme();
 
-  const [searchParams] = useSearchParams();
   const loadTwarrts = useCallback(async () => {
     setCategories(undefined);
     setError(undefined);
 
-    const result = await TwitarrAPI3.forum.getCategories(
-      Object.fromEntries(searchParams.entries()),
-    );
+    const result = await TwitarrAPI3.forum.getCategoryData({
+      categoryID: categoryId,
+    });
 
     if (result.success) {
       setCategories(result.data);
     } else {
       setError(result);
     }
-  }, [searchParams]);
+  }, [categoryId]);
 
   useEffect(() => {
     loadTwarrts();
@@ -50,25 +56,31 @@ export default function ForumCategoriesPage(_: Props) {
 
   return (
     <Container maxWidth="sm" sx={{ py: 2 }}>
-      {/* TODO: Find */}
+      <Breadcrumbs aria-label="breadcrumb">
+        <MUILink color="inherit" component={Link} to="/forum" underline="hover">
+          Forum
+        </MUILink>
+        <Typography color="text.primary">{categories?.title}</Typography>
+      </Breadcrumbs>
+      {/* TODO: New thread */}
       <Stack spacing={1}>
         {categories == null ? (
           <LoadingPage />
-        ) : categories.length === 0 ? (
+        ) : categories.forumThreads.length === 0 ? (
           <Typography sx={{ pt: 4, textAlign: "center" }} variant="h2">
             No categories to display
           </Typography>
         ) : (
           <Card>
             <ButtonGroup orientation="vertical" sx={{ width: "100%" }}>
-              {categories.map((category, i) => (
+              {categories.forumThreads.map((forumThread, i) => (
                 <ButtonBase
                   component={Link}
-                  key={category.categoryID}
+                  key={forumThread.forumID}
                   sx={{
                     alignItems: "flex-start",
                     borderBottom:
-                      i === categories.length - 1
+                      i === categories.forumThreads.length - 1
                         ? null
                         : `1px solid ${theme.palette.divider}`,
                     justifyContent: "space-between",
@@ -77,15 +89,20 @@ export default function ForumCategoriesPage(_: Props) {
                       background: theme.palette.grey["100"],
                     },
                   }}
-                  to={`/forum/${category.categoryID}`}
+                  to={`/forum/post/${forumThread.forumID}`}
                 >
                   <Box>
-                    <Typography variant="h4">{category.title}</Typography>
-                    <Typography variant="body2">{category.purpose}</Typography>
+                    <Typography variant="h4">{forumThread.title}</Typography>
+                    <Typography variant="body2">
+                      {forumThread.postCount} posts
+                    </Typography>
                   </Box>
                   <Box>
                     <Typography variant="body2">
-                      {category.numThreads} threads
+                      By @{forumThread.creator.username}
+                    </Typography>
+                    <Typography variant="body2">
+                      Last post: @{forumThread.lastPoster?.username}
                     </Typography>
                   </Box>
                 </ButtonBase>

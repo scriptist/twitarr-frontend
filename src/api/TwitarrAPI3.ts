@@ -175,7 +175,7 @@ export interface APIResultError {
 }
 
 export interface APITwarrt {
-  author: APIAuthor;
+  author: APIUserHeader;
   createdAt: string;
   images: string[];
   isBookmarked: boolean;
@@ -184,10 +184,11 @@ export interface APITwarrt {
   twarrtID: number;
 }
 
-export interface APIAuthor {
+export interface APIUserHeader {
   displayName: string;
   username: string;
   userID: string;
+  userImage: string | void;
 }
 
 export interface APICategory {
@@ -196,6 +197,27 @@ export interface APICategory {
   numThreads: number;
   purpose: string;
   title: string;
+}
+
+export interface APICategoryData {
+  categoryID: string;
+  title: string;
+  isRestricted: boolean;
+  numThreads: number;
+  forumThreads: APIForumListData[];
+}
+
+export interface APIForumListData {
+  forumID: string;
+  creator: APIUserHeader;
+  title: string;
+  postCount: number;
+  readCount: number;
+  createdAt: string;
+  lastPoster: APIUserHeader | void;
+  lastPostAt: string;
+  isLocked: boolean;
+  isFavorite: boolean;
 }
 
 export interface APICreateAPIMethod {
