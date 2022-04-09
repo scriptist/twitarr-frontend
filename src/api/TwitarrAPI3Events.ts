@@ -10,7 +10,7 @@ export interface EventData {
   forum: string;
   isFavorite: boolean;
   location: string;
-  // e.g. "Official", "Gaming", "Shadow Event", etc.
+  // Formatted in ISO 8601 format e.g. 2020-03-08T05:00:00.000Z
   startTime: string;
   title: string;
   uid: string;
