@@ -50,7 +50,12 @@
       "plugin:prettier/recommended"
     ],
     "rules": {
-      "prettier/prettier": "warn",
+      "prettier/prettier": [
+        "warn",
+        {
+          "endOfLine": "auto"
+        }
+      ],
       "sort-imports": "error",
       "react/jsx-sort-props": "warn",
       "react-hooks/exhaustive-deps": [
