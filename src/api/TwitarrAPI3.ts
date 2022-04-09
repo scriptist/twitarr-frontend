@@ -1,5 +1,6 @@
 import { getCookie, removeCookie, setCookie } from "typescript-cookie";
 import TwitarrAPI3Auth from "./TwitarrAPI3Auth";
+import TwitarrAPI3Events from "./TwitarrAPI3Events";
 import TwitarrAPI3Forum from "./TwitarrAPI3Forum";
 import TwitarrAPI3Twarrts from "./TwitarrAPI3Twarrts";
 
@@ -16,6 +17,7 @@ class TwittarrAPI3 {
   auth: TwitarrAPI3Auth;
   forum: TwitarrAPI3Forum;
   twarrts: TwitarrAPI3Twarrts;
+  events: TwitarrAPI3Events;
 
   constructor() {
     // Init modules
@@ -25,6 +27,7 @@ class TwittarrAPI3 {
     this.auth = new TwitarrAPI3Auth(this.createAPIMethod, this.setUser);
     this.forum = new TwitarrAPI3Forum(this.createAPIMethod);
     this.twarrts = new TwitarrAPI3Twarrts(this.createAPIMethod);
+    this.events = new TwitarrAPI3Events(this.createAPIMethod);
 
     // Load session information from cookie
     try {
@@ -220,6 +223,12 @@ export interface APIForumListData {
   isFavorite: boolean;
 }
 
+/**
+ * Interface that defines a method signature for creating
+ *
+ * @template TParams
+ * @template TResponseData
+ */
 export interface APICreateAPIMethod {
   <TParams, TResponseData>(
     config: CreateAPIMethodConfig<TParams, TResponseData>,
