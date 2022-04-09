@@ -13,7 +13,7 @@ import ForumCategoryForumsPage from "./page/forum/FormCategoryForumsPage";
 import Layout from "./page/Layout";
 import LogInPage from "./page/LogInPage";
 import NotFoundPage from "./page/NotFoundPage";
-import SchedulePage from "./page/ScedulePage";
+import SchedulePage from "./page/schedule/ScedulePage";
 import TwarrtsComposePage from "./page/twarrts/TwarrtsComposePage";
 import TwarrtsListPage from "./page/twarrts/TwarrtsListPage";
 
