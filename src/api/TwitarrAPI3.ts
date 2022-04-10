@@ -224,7 +224,8 @@ export interface APIForumListData {
 }
 
 /**
- * Interface that defines a method signature for creating
+ * Interface that defines a method signature for creating a method that when invoked will send the configured
+ * request to the server and return a Promise with the results.
  *
  * @template TParams
  * @template TResponseData

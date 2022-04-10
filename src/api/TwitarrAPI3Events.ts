@@ -17,7 +17,7 @@ export interface EventData {
 }
 
 export default class TwitarrAPI3Events extends TwitarrAPI3Module {
-  getEvents = this.createAPIMethod<null, EventData[]>({
+  getEvents = this.createAPIMethod<void, EventData[]>({
     path: "/events",
     requestInit: {
       method: "GET",
