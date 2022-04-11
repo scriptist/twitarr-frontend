@@ -1,4 +1,4 @@
-import { Card, CardHeader, Container, Stack } from "@mui/material";
+import { Box, Card, CardHeader, Container, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { EventData } from "../../../api/TwitarrAPI3Events";
 import TwitarrAPI3 from "../../../api/TwitarrAPI3";
@@ -40,10 +40,14 @@ export function EventCard(_props: EventCardProps) {
         title={
           <>
             {_props.event.eventType === "Official" && (
-              <img
-                alt=""
-                src={"logo192.png"}
-                style={{ height: "auto", maxWidth: "20px" }}
+              <Box
+                component="img"
+                src="logo192.png"
+                sx={{
+                  alt: "",
+                  height: "auto",
+                  maxWidth: "20px",
+                }}
               />
             )}{" "}
             <span>{_props.event.title}</span>
