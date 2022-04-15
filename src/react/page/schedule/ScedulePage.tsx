@@ -1,4 +1,11 @@
-import { Box, Card, CardHeader, Container, Stack } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Container,
+  Stack,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { EventData } from "../../../api/TwitarrAPI3Events";
 import TwitarrAPI3 from "../../../api/TwitarrAPI3";
@@ -54,6 +61,7 @@ export function EventCard(_props: EventCardProps) {
           </>
         }
       />
+      <CardContent>{_props.event.description}</CardContent>
     </Card>
   );
 }
