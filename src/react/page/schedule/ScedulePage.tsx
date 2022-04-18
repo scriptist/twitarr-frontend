@@ -43,25 +43,49 @@ export function EventCard(_props: EventCardProps) {
   return (
     <Card>
       <CardHeader
-        subheader={_props.event.location}
-        title={
-          <>
-            {_props.event.eventType === "Official" && (
-              <Box
-                component="img"
-                src="logo192.png"
-                sx={{
-                  alt: "",
-                  height: "auto",
-                  maxWidth: "20px",
-                }}
-              />
-            )}{" "}
-            <span>{_props.event.title}</span>
-          </>
-        }
+        subheader={<EventSubHeader event={_props.event} />}
+        title={<EventTitle event={_props.event} />}
       />
       <CardContent>{_props.event.description}</CardContent>
     </Card>
+  );
+}
+
+/**
+ * Renders the CardHeader subheader element. The event's start time and date
+ */
+function EventSubHeader(_props: EventCardProps) {
+  const startDate: Date = new Date(_props.event.startTime);
+  const endDate: Date = new Date(_props.event.endTime);
+  return (
+    <>
+      {_props.event.location}{" "}
+      <Box sx={{ display: "inline", fontStyle: "italic" }}>
+        {startDate.toLocaleDateString()} {startDate.toLocaleTimeString()} -{" "}
+        {endDate.toLocaleTimeString()}
+      </Box>
+    </>
+  );
+}
+
+/**
+ * Renders the CardHeader 'title' element. THe title of the event and the logo if it's an official event.
+ */
+function EventTitle(_props: EventCardProps) {
+  return (
+    <>
+      {_props.event.eventType === "Official" && (
+        <Box
+          component="img"
+          src="logo192.png"
+          sx={{
+            alt: "",
+            height: "auto",
+            maxWidth: "20px",
+          }}
+        />
+      )}{" "}
+      <span>{_props.event.title}</span>
+    </>
   );
 }
