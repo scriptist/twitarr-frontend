@@ -9,11 +9,12 @@ import {
   IconButton,
   IconButtonProps,
   Stack,
+  Typography,
   styled,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { EventData } from "../../../api/TwitarrAPI3Events";
 import { ExpandMore } from "@mui/icons-material";
 import TwitarrAPI3 from "../../../api/TwitarrAPI3";
@@ -51,20 +52,30 @@ interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
 
+interface StyledTextProps extends PropsWithChildren<any> {
+  expand: boolean;
+}
+
 const StyledExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;
-  console.log(expand, other);
   return <IconButton {...other} />;
-})(({ theme, expand }) => {
-  console.log(expand);
-  return {
-    transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
-  };
-});
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+const StyledText = styled((props: StyledTextProps) => {
+  const { expand, ...other } = props;
+  return <Typography {...other}>{props.children}</Typography>;
+})(({ theme, expand }) => ({
+  opacity: expand ? 0 : 1,
+  transition: theme.transitions.create("opacity", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 export function EventCard(_props: EventCardProps) {
   const [expanded, setExpanded] = useState(false);
@@ -83,6 +94,9 @@ export function EventCard(_props: EventCardProps) {
       />
       {!sm && (
         <CardActions disableSpacing>
+          <StyledText expand={sm || expanded} noWrap>
+            {_props.event.description}
+          </StyledText>
           <StyledExpandMore expand={sm || expanded} onClick={handleExpandClick}>
             <ExpandMore />
           </StyledExpandMore>
