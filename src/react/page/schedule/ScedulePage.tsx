@@ -56,8 +56,7 @@ interface StyledTextProps extends PropsWithChildren<any> {
   expand: boolean;
 }
 
-const StyledExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
+const StyledExpandMore = styled(({ expand, ...other }: ExpandMoreProps) => {
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
   transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
@@ -67,9 +66,8 @@ const StyledExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const StyledText = styled((props: StyledTextProps) => {
-  const { expand, ...other } = props;
-  return <Typography {...other}>{props.children}</Typography>;
+const StyledText = styled(({ children, expand, ...other }: StyledTextProps) => {
+  return <Typography {...other}>{children}</Typography>;
 })(({ theme, expand }) => ({
   opacity: expand ? 0 : 1,
   transition: theme.transitions.create("opacity", {
@@ -77,7 +75,7 @@ const StyledText = styled((props: StyledTextProps) => {
   }),
 }));
 
-export function EventCard(_props: EventCardProps) {
+export function EventCard({ event, ..._props }: EventCardProps) {
   const [expanded, setExpanded] = useState(false);
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.up("sm"));
@@ -89,13 +87,13 @@ export function EventCard(_props: EventCardProps) {
   return (
     <Card>
       <CardHeader
-        subheader={<EventSubHeader {..._props} />}
-        title={<EventTitle {..._props} />}
+        subheader={<EventSubHeader event={event} {..._props} />}
+        title={<EventTitle event={event} {..._props} />}
       />
       {!sm && (
         <CardActions disableSpacing>
           <StyledText expand={sm || expanded} noWrap>
-            {_props.event.description}
+            {event.description}
           </StyledText>
           <StyledExpandMore expand={sm || expanded} onClick={handleExpandClick}>
             <ExpandMore />
@@ -103,7 +101,7 @@ export function EventCard(_props: EventCardProps) {
         </CardActions>
       )}
       <Collapse in={sm || expanded}>
-        <CardContent>{_props.event.description}</CardContent>
+        <CardContent>{event.description}</CardContent>
       </Collapse>
     </Card>
   );
@@ -112,12 +110,12 @@ export function EventCard(_props: EventCardProps) {
 /**
  * Renders the CardHeader subheader element. The event's start time and date
  */
-function EventSubHeader(_props: EventCardProps) {
-  const startDate: Date = new Date(_props.event.startTime);
-  const endDate: Date = new Date(_props.event.endTime);
+function EventSubHeader({ event }: EventCardProps) {
+  const startDate: Date = new Date(event.startTime);
+  const endDate: Date = new Date(event.endTime);
   return (
     <>
-      {_props.event.location}{" "}
+      {event.location}{" "}
       <Box sx={{ display: "inline", fontStyle: "italic" }}>
         {startDate.toLocaleDateString()} {startDate.toLocaleTimeString()} -{" "}
         {endDate.toLocaleTimeString()}
@@ -129,10 +127,10 @@ function EventSubHeader(_props: EventCardProps) {
 /**
  * Renders the CardHeader 'title' element. THe title of the event and the logo if it's an official event.
  */
-function EventTitle(_props: EventCardProps) {
+function EventTitle({ event }: EventCardProps) {
   return (
     <>
-      {_props.event.eventType === "Official" && (
+      {event.eventType === "Official" && (
         <Box
           component="img"
           src="logo192.png"
@@ -143,7 +141,7 @@ function EventTitle(_props: EventCardProps) {
           }}
         />
       )}{" "}
-      <span>{_props.event.title}</span>
+      <span>{event.title}</span>
     </>
   );
 }
