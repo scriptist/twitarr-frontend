@@ -1,13 +1,21 @@
 import {
   Box,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
+  Collapse,
   Container,
+  IconButton,
+  IconButtonProps,
   Stack,
+  styled,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { EventData } from "../../../api/TwitarrAPI3Events";
+import { ExpandMore } from "@mui/icons-material";
 import TwitarrAPI3 from "../../../api/TwitarrAPI3";
 
 interface Props {}
@@ -28,7 +36,7 @@ export default function SchedulePage(_: Props) {
       <Stack spacing={2}>
         {events.length > 0 &&
           events.map((e) => {
-            return <EventCard event={e} />;
+            return <EventCard event={e} key={e.eventID} />;
           })}
       </Stack>
     </Container>
@@ -39,14 +47,50 @@ interface EventCardProps {
   event: EventData;
 }
 
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+
+const StyledExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props;
+  console.log(expand, other);
+  return <IconButton {...other} />;
+})(({ theme, expand }) => {
+  console.log(expand);
+  return {
+    transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+    marginLeft: "auto",
+    transition: theme.transitions.create("transform", {
+      duration: theme.transitions.duration.shortest,
+    }),
+  };
+});
+
 export function EventCard(_props: EventCardProps) {
+  const [expanded, setExpanded] = useState(false);
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.up("sm"));
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
   return (
     <Card>
       <CardHeader
-        subheader={<EventSubHeader event={_props.event} />}
-        title={<EventTitle event={_props.event} />}
+        subheader={<EventSubHeader {..._props} />}
+        title={<EventTitle {..._props} />}
       />
-      <CardContent>{_props.event.description}</CardContent>
+      {!sm && (
+        <CardActions disableSpacing>
+          <StyledExpandMore expand={sm || expanded} onClick={handleExpandClick}>
+            <ExpandMore />
+          </StyledExpandMore>
+        </CardActions>
+      )}
+      <Collapse in={sm || expanded}>
+        <CardContent>{_props.event.description}</CardContent>
+      </Collapse>
     </Card>
   );
 }
