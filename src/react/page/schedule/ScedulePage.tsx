@@ -19,9 +19,21 @@ import { EventData } from "../../../api/TwitarrAPI3Events";
 import { ExpandMore } from "@mui/icons-material";
 import TwitarrAPI3 from "../../../api/TwitarrAPI3";
 
-interface Props {}
+interface SchedulePageProps {}
 
-export default function SchedulePage(_: Props) {
+interface EventCardProps {
+  event: EventData;
+}
+
+interface Expandable {
+  expand: boolean;
+}
+
+interface ExpandMoreProps extends IconButtonProps, Expandable {}
+
+interface StyledTextProps extends PropsWithChildren<any>, Expandable {}
+
+export default function SchedulePage(_: SchedulePageProps) {
   const [events, setEvents] = useState<EventData[]>([]);
 
   useEffect(() => {
@@ -42,18 +54,6 @@ export default function SchedulePage(_: Props) {
       </Stack>
     </Container>
   );
-}
-
-interface EventCardProps {
-  event: EventData;
-}
-
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-interface StyledTextProps extends PropsWithChildren<any> {
-  expand: boolean;
 }
 
 const StyledExpandMore = styled(({ expand, ...other }: ExpandMoreProps) => {
