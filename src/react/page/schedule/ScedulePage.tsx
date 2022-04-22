@@ -66,9 +66,11 @@ const StyledExpandMore = styled(({ expand, ...other }: ExpandMoreProps) => {
   }),
 }));
 
-const StyledText = styled(({ children, expand, ...other }: StyledTextProps) => {
-  return <Typography {...other}>{children}</Typography>;
-})(({ theme, expand }) => ({
+const StyledCareActionType = styled(
+  ({ children, expand, ...other }: StyledTextProps) => {
+    return <Typography {...other}>{children}</Typography>;
+  },
+)(({ theme, expand }) => ({
   opacity: expand ? 0 : 1,
   transition: theme.transitions.create("opacity", {
     duration: theme.transitions.duration.shortest,
@@ -92,9 +94,9 @@ export function EventCard({ event, ..._props }: EventCardProps) {
       />
       {!medMedia && (
         <CardActions>
-          <StyledText expand={medMedia || expanded} noWrap>
+          <StyledCareActionType expand={medMedia || expanded} noWrap>
             {event.description}
-          </StyledText>
+          </StyledCareActionType>
           <StyledExpandMore
             expand={medMedia || expanded}
             onClick={handleExpandClick}
