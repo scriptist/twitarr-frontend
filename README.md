@@ -1,4 +1,4 @@
-#j Twitarr Frontend
+# Twitarr Frontend
 
 This is a project to rebuild the Twitarr frontend using React with MUI components. It is compatible with the [Swiftarr](https://github.com/challfry/swiftarr/) backend.
 
