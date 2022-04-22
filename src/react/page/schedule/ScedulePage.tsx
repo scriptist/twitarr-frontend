@@ -6,6 +6,7 @@ import {
   CardHeader,
   Collapse,
   Container,
+  Fade,
   IconButton,
   IconButtonProps,
   Stack,
@@ -66,17 +67,6 @@ const StyledExpandMore = styled(({ expand, ...other }: ExpandMoreProps) => {
   }),
 }));
 
-const StyledCareActionType = styled(
-  ({ children, expand, ...other }: StyledTextProps) => {
-    return <Typography {...other}>{children}</Typography>;
-  },
-)(({ theme, expand }) => ({
-  opacity: expand ? 0 : 1,
-  transition: theme.transitions.create("opacity", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
-
 export function EventCard({ event, ..._props }: EventCardProps) {
   const [expanded, setExpanded] = useState(false);
   const theme = useTheme();
@@ -94,9 +84,9 @@ export function EventCard({ event, ..._props }: EventCardProps) {
       />
       {!medMedia && (
         <CardActions>
-          <StyledCareActionType expand={medMedia || expanded} noWrap>
-            {event.description}
-          </StyledCareActionType>
+          <Fade in={!expanded}>
+            <Typography noWrap>{event.description}</Typography>
+          </Fade>
           <StyledExpandMore
             expand={medMedia || expanded}
             onClick={handleExpandClick}
