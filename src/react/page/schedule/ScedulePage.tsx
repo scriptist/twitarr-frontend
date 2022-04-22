@@ -78,7 +78,7 @@ const StyledText = styled(({ children, expand, ...other }: StyledTextProps) => {
 export function EventCard({ event, ..._props }: EventCardProps) {
   const [expanded, setExpanded] = useState(false);
   const theme = useTheme();
-  const sm = useMediaQuery(theme.breakpoints.up("sm"));
+  const medMedia = useMediaQuery(theme.breakpoints.up("md"));
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -90,17 +90,20 @@ export function EventCard({ event, ..._props }: EventCardProps) {
         subheader={<EventSubHeader event={event} {..._props} />}
         title={<EventTitle event={event} {..._props} />}
       />
-      {!sm && (
-        <CardActions disableSpacing>
-          <StyledText expand={sm || expanded} noWrap>
+      {!medMedia && (
+        <CardActions>
+          <StyledText expand={medMedia || expanded} noWrap>
             {event.description}
           </StyledText>
-          <StyledExpandMore expand={sm || expanded} onClick={handleExpandClick}>
+          <StyledExpandMore
+            expand={medMedia || expanded}
+            onClick={handleExpandClick}
+          >
             <ExpandMore />
           </StyledExpandMore>
         </CardActions>
       )}
-      <Collapse in={sm || expanded}>
+      <Collapse in={medMedia || expanded}>
         <CardContent>{event.description}</CardContent>
       </Collapse>
     </Card>
