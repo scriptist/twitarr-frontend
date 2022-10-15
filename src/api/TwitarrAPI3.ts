@@ -7,7 +7,7 @@ import TwitarrAPI3Twarrts from "./TwitarrAPI3Twarrts";
 // https://github.com/challfry/swiftarr/wiki/API-Documentation
 
 class TwittarrAPI3 {
-  readonly apiRoot: string = "https://swiftarr.herokuapp.com/api/v3";
+  readonly apiRoot: string = "https://beta.twitarr.com/api/v3";
   private readonly cookieName: string = "twitarr-session";
 
   private authChangeHandler: APIAuthChangeHandler | undefined;
